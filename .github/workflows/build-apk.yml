@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android WebView APK
 
 on:
   push:
@@ -13,22 +13,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - name: Build WebView APK
+        uses: niemasd/android-webview-action@v1
         with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./android/gradlew
-
-      - name: Build APK
-        run: |
-          cd android
-          ./gradlew assembleRelease
+          app-name: DiksEkspressUltimate
+          package-name: com.diks.ekspress
+          app-icon: https://raw.githubusercontent.com/github/explore/main/topics/android/android.png
+          url: https://example.com
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: DiksEkspressUltimate-APK
-          path: android/app/build/outputs/apk/release/app-release.apk
+          name: DiksEkspressUltimate.apk
+          path: "*.apk"
