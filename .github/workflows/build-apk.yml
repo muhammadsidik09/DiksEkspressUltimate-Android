@@ -10,19 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Build WebView APK
-        uses: niemasd/android-webview-action@v1
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
-          app-name: DiksEkspressUltimate
-          package-name: com.diks.ekspress
-          app-icon: https://raw.githubusercontent.com/github/explore/main/topics/android/android.png
-          url: https://example.com
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Clone Android WebView template
+        run: |
+          git clone https://github.com/jamesmontemagno/AndroidWebViewApp.git android
+          sed -i 's|https://www.example.com|https://example.com|g' android/app/src/main/java/com/example/webview/MainActivity.kt
+
+      - name: Grant permission
+        run: chmod +x android/gradlew
+
+      - name: Build APK
+        run: |
+          cd android
+          ./gradlew assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: DiksEkspressUltimate.apk
-          path: "*.apk"
+          path: android/app/build/outputs/apk/release/*.apk
