@@ -10,19 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # Checkout repo kamu (boleh kosong)
+      - name: Checkout current repo
         uses: actions/checkout@v4
+
+      # Checkout template Android WebView (RESMI & AMAN)
+      - name: Checkout Android WebView template
+        uses: actions/checkout@v4
+        with:
+          repository: googlearchive/android-BasicWebView
+          path: android
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Clone WebView template
-        run: |
-          git clone https://github.com/googlearchive/android-BasicWebView.git android
-          sed -i 's|https://www.google.com|https://example.com|g' android/app/src/main/java/com/example/android/basicwebview/MainActivity.java
 
       - name: Grant execute permission
         run: chmod +x android/gradlew
