@@ -1,0 +1,44 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Install Capacitor CLI
+      run: npm install @capacitor/cli @capacitor/core
+
+    - name: Add Android Platform
+      run: npx cap add android || echo "Android platform exists"
+
+    - name: Copy Web to Android
+      run: npx cap copy
+
+    - name: Build APK
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openjdk-17
+        export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+        cd android
+        ./gradlew assembleRelease
+      shell: bash
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: DiksEkspressUltimate.apk
+        path: android/app/build/outputs/apk/release/app-release.apk
