@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Java
@@ -19,12 +19,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Clone Android WebView template
+      - name: Clone WebView template
         run: |
-          git clone https://github.com/jamesmontemagno/AndroidWebViewApp.git android
-          sed -i 's|https://www.example.com|https://example.com|g' android/app/src/main/java/com/example/webview/MainActivity.kt
+          git clone https://github.com/googlearchive/android-BasicWebView.git android
+          sed -i 's|https://www.google.com|https://example.com|g' android/app/src/main/java/com/example/android/basicwebview/MainActivity.java
 
-      - name: Grant permission
+      - name: Grant execute permission
         run: chmod +x android/gradlew
 
       - name: Build APK
